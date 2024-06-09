@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Personajes de Rick and Morty</title>
+    <style>
+           .h2{
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+        }
+
+        body  {
+            background: url('cabezas-de-rick-and-morty_3840x2160_xtrafondos.com.jpg') no-repeat center center fixed;
+            background-size: cover;
+            
+        }
+     
+
+
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            position:relative;
+            background-color: #91378f;
+            z-index: 1; 
+            opacity: 95%;
+            
+        }
+
+
+        input[type="text"] {
+            padding: 10px;
+            width: 90%;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #d40f60;
+            color: white;
+            border: none;
+            cursor: pointer;
+            opacity: 100%;
+        }
+        button:hover {
+            background-color:#f70a71;
+        }
+        #results {
+            text-align: left;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            background-color: #91378f;
+        }
+        .character {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: calc(33.33% - 20px);
+            margin-right: 20px;
+            box-sizing: border-box;
+            background-color: rgba(116, 116, 116, 0.7);
+            border-radius: 8px;
+        }
+        .character img {
+            max-width: 200px;
+            max-height: 190px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="imgbusca.png" alt="imn" height="150px" width="800px">
+        <input type="text" id="searchInput" placeholder="Introduce un nombre...">
+        <button type="button" onclick="searchCharacter()">Buscar</button>
+        <div id="results"></div>
+    </div>
+
+
+
+    <script>
+        function searchCharacter() {
+            var searchQuery = document.getElementById('searchInput').value.trim();
+            var apiUrl = 'https://rickandmortyapi.com/api/character/?name=' + searchQuery;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = '';
+                    if (data.results.length > 0) {
+                        data.results.forEach(character => {
+                            var characterDiv = document.createElement('div');
+                            characterDiv.classList.add('character');
+                            characterDiv.innerHTML = `
+                                <h2>${character.name}</h2>
+                                <img src="${character.image}" alt="${character.name}">
+                                <p><strong>Especie:</strong> ${character.species}</p>
+                                <p><strong>Género:</strong> ${character.gender}</p>
+                                <p><strong>Estado:</strong> ${character.status}</p>
+                                <p><strong>Dimension de origen:</strong> ${character.origin.name}</p>
+                                <p><strong>Última vez visto en:</strong> ${character.location.name}</p>
+                            `;
+                            resultsDiv.appendChild(characterDiv);
+                        });
+                    }
+                })
+                .catch(error => console.log('Error:', error));
+        }
+    </script>
+</body>
+</html>
